@@ -4,13 +4,12 @@
     "description": "Setup for Crio NodeJS Basics Byte",
     "main": "app.js",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "nodemon app.js"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon app.js"
     },
     "author": "Aman Kumar",
     "license": "ISC",
     "dependencies": {
-      "nodemon": "^2.0.6"
+        "nodemon": "^2.0.6"
     }
-  }
-  
+}

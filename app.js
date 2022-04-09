@@ -16,12 +16,8 @@ http
         //Content
         response.write("<h1>TODO</h1>");
         response.write(todoList.toString());
-        //Display in order
-        todoList.map((item, index) =>
-          response.write(`<p>${index + 1}. ${item}</p>`)
-        );
         // Tell the server the response is complete and to close the connection
-        response.end(`<hr/> Total items - ${todoList.length}`);
+        response.end();
       } else if (method === "POST") {
         let body = "";
         request
@@ -33,7 +29,10 @@ http
           })
           .on("end", () => {
             body = JSON.parse(body);
+            let newTodo = body.name;
             todoList.push(body.name);
+
+            response.writeHead(201);
           });
       } else {
         response.writeHead(501);

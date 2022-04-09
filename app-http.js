@@ -1,18 +1,15 @@
-// File: app.js
+// File: app-html.js
+const express = require("express");
 
 const http = require("http");
-const urlModule = require("url");
 
 const port = 8081;
 
-let todoList = ["Complete Node Byte", "Play Cricket"];
+let todoList = ["Complete Node Byte", "Play Cricket", "Learn express.js"];
 
 http
   .createServer((request, response) => {
     const { method, url } = request;
-    //To handle query request - GET request based on value provided in query object
-    let q = urlModule.parse(`${url}?name=playcricket`, true);
-    let qData = q.query; //<br/><br/> url: ${url} &&  q: ${qData.name}
 
     if (url === "/todos") {
       if (method == "GET") {

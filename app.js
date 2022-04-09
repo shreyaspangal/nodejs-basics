@@ -4,43 +4,45 @@ const http = require("http");
 
 const port = 8081;
 
+let todoList = ["Complete Node Byte", "Play Cricket"];
+
 http
   .createServer((request, response) => {
     const { method, url } = request;
-    if (url === "/todos" && method === "GET") {
-      // Set response status code and response headers
-      response.writeHead(200, { "Content-Type": "text/html" });
-      // Set response body i.e, data to be sent
-      response.write("<h1>TODO</h1>");
-      response.write("<h2>Created by Shreyas Pangal</h2>");
-      response.write(`<p>Method: <strong>${method}</strong></p>`);
-      response.write(`<p>Url: <strong>${url}</strong></p>`);
-      // Tell the server the response is complete and to close the connection
-      response.end("- Success");
-    } else if (method !== "GET") {
-      response.statusCode = 500;
-      response.end("Not Implemented");
-    } else if (url !== "/todos") {
-      response.statusCode = 404;
-      response.end("Not Found");
+
+    if (url == "/todos") {
+      if (method == "GET") {
+        response.writeHead(200, { "Content-Type": "text/html" });
+        //Content
+        response.write("<h1>TODO</h1>");
+        response.write(todoList.toString());
+        //Display in order
+        todoList.map((item, index) =>
+          response.write(`<p>${index + 1}. ${item}</p>`)
+        );
+        // Tell the server the response is complete and to close the connection
+        response.end(`<hr/> Total items - ${todoList.length}`);
+      } else if (method === "POST") {
+        let body = "";
+        request
+          .on("error", (err) => {
+            console.error(err);
+          })
+          .on("data", (chunk) => {
+            body += chunk;
+          })
+          .on("end", () => {
+            body = JSON.parse(body);
+            todoList.push(body.name);
+          });
+      } else {
+        response.writeHead(501);
+      }
+    } else {
+      response.writeHead(404);
     }
 
-    //Method -2
-    // if (url == "/todos") {
-    //   if (method == "GET") {
-    //     response.writeHead(200, { "Content-Type": "text/html" });
-
-    //     response.write("<h1>TODO</h1>");
-
-    //     response.write("<p>Created by: Crio.Do</p>");
-    //   } else {
-    //     response.writeHead(501);
-    //   }
-    // } else {
-    //   response.writeHead(404);
-    // }
-
-    // response.end();
+    response.end();
   })
   .listen(port, () => {
     // Log text to the terminal once the server starts

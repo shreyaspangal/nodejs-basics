@@ -70,7 +70,7 @@ http
       response.write("<h1>TODO</h1>");
       response.write(`${filteredList.toString()}`);
       // Tell the server the response is complete and to close the connection
-      if (numTodosToReturn === todoList.length) {
+      if (numTodosToReturn <= todoList.length) {
         response.end();
       } else {
         response.end(`<p>There are only ${todoList.length} items in the list.</p>`);

@@ -8,11 +8,16 @@ app.use(express.json());
 
 let todoList = ["Complete Node Byte", "Play Cricket", "Learn express.js"];
 
+app.get("/user/todos", (req, res) => {
+  res.send(todoList);
+});
+
 app
   .route("/todos")
   .get((req, res) => {
-    const { method, url } = req;
-    res.send(todoList);
+    const redirectLocation = "/user/todos";
+    res.set("Location", redirectLocation);
+    res.status(302).send();
   })
   .post((req, res) => {
     let name = req.body.name;

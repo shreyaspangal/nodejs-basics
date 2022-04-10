@@ -1,7 +1,7 @@
 // File: app.js
 
 const http = require("http");
-const urlModule = require("url");
+const urlLib = require("url");
 
 const port = 8081;
 
@@ -11,8 +11,9 @@ http
   .createServer((request, response) => {
     const { method, url } = request;
     //To handle query request - GET request based on value provided in query object
-    let q = urlModule.parse(`${url}?name=playcricket`, true);
-    let qData = q.query; //<br/><br/> url: ${url} &&  q: ${qData.name}
+    let urlParsed = urlLib.parse(url, true);
+    let numTodosToReturn = urlParsed.query.n;
+    // console.log(numTodosToReturn);
 
     if (url === "/todos") {
       if (method == "GET") {
@@ -61,6 +62,19 @@ http
           });
       } else {
         response.writeHead(501);
+      }
+    } else if (numTodosToReturn && numTodosToReturn > 0) {
+      response.writeHead(200, { "Content-Type": "text/html" });
+      //Content
+      let filteredList = todoList.slice(0, numTodosToReturn);
+      response.write("<h1>TODO</h1>");
+      response.write(`${filteredList.toString()}`);
+      // Tell the server the response is complete and to close the connection
+      if (numTodosToReturn === todoList.length) {
+        response.end();
+      } else {
+        response.end(`<p>There are only ${todoList.length} items in the list.</p>`);
+
       }
     } else {
       response.writeHead(404);
